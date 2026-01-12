@@ -10,29 +10,50 @@ html {
 
 body {
   padding: 16px;
-  background-color: #eef2f5;
+  background-color: #f9dbbd;
   text-align: center;
+}
+
+h1 {
+  margin: 20px;
+  color: #450920;
 }
 
 .new {
   padding: 10px 20px;
   margin: 20px;
   font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #da627d;
+  color: white;
   cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+.new:hover {
+  background-color: #a53860;
+  box-shadow: #f95c985f 0px 0px 8px 2px;
 }
 
 #book-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  gap: 5px;
 }
 
 .book {
-  border: 1px solid #ccc;
+  border: none;
   padding: 16px;
   margin: 16px;
+  min-width: 200px;
   border-radius: 8px;
   background-color: #f9f9f9;
+  transition-duration: 0.3s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book:hover {
+  box-shadow: 0 0 4px 2px #a5386067;
 }

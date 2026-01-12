@@ -48,6 +48,14 @@ function addBookToLibrary(title, author, pages, read) {
   displayBooks();
 }
 
+function removeBookFromLibrary(bookId) {
+  const bookIndex = myLibrary.findIndex((book) => book.id === bookId);
+  if (bookIndex !== -1) {
+    myLibrary.splice(bookIndex, 1);
+    displayBooks();
+  }
+}
+
 function displayBooks() {
   const booksContainer = document.getElementById("book-container");
   booksContainer.innerHTML = "";
@@ -55,13 +63,20 @@ function displayBooks() {
   myLibrary.forEach((book) => {
     const bookCard = document.createElement("div");
     bookCard.classList.add("book");
+    bookCard.dataset.id = book.id;
     bookCard.innerHTML = `
             <h2>${book.title}</h2>
-            <p>Author: ${book.author}</p>
-            <p>Pages: ${book.pages}</p>
+            <p>${book.author}</p>
+            <p>${book.pages}</p>
             <p>Status: ${book.read ? "Read" : "Not Read"}</p>
+            <button class="remove-book">Remove</button>
         `;
     booksContainer.appendChild(bookCard);
+
+    const removeButton = bookCard.querySelector(".remove-book");
+    removeButton.addEventListener("click", () => {
+      removeBookFromLibrary(book.id);
+    });
   });
 }
 
