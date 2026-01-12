@@ -14,6 +14,20 @@ body {
   text-align: center;
 }
 
+.new {
+  padding: 10px 20px;
+  margin: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#book-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
 .book {
   border: 1px solid #ccc;
   padding: 16px;

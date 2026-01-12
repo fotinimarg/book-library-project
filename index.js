@@ -8,14 +8,45 @@ function Book(id, title, author, pages, read) {
   this.read = read;
 }
 
+const newBookButton = document.querySelector(".new");
+newBookButton.addEventListener("click", showBookForm);
+const form = document.createElement("form");
+form.innerHTML = `
+            <input type="text" name="title" placeholder="Title" required />
+            <input type="text" name="author" placeholder="Author" required />
+            <input type="number" name="pages" placeholder="Pages" required />
+            <label>
+                <input type="checkbox" name="read" />
+                Read
+            </label>
+            <button type="submit">Add Book</button>
+        `;
+
+function showBookForm() {
+  const dialog = document.querySelector("#new-book-dialog");
+  dialog.appendChild(form);
+  dialog.showModal();
+
+  dialog.querySelector("form").onsubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const title = formData.get("title");
+    const author = formData.get("author");
+    const pages = parseInt(formData.get("pages"), 10);
+    const read = formData.get("read") === "on";
+
+    addBookToLibrary(title, author, pages, read);
+    form.reset();
+    dialog.removeChild(form);
+    dialog.close();
+  };
+}
+
 function addBookToLibrary(title, author, pages, read) {
   const newBook = new Book(crypto.randomUUID(), title, author, pages, read);
   myLibrary.push(newBook);
+  displayBooks();
 }
-
-hobbit = addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 310, true);
-dune = addBookToLibrary("Dune", "Frank Herbert", 412, false);
-foundation = addBookToLibrary("Foundation", "Isaac Asimov", 255, true);
 
 function displayBooks() {
   const booksContainer = document.getElementById("book-container");
