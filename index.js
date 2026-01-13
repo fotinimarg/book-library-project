@@ -6,19 +6,22 @@ function Book(id, title, author, pages, read) {
   this.author = author;
   this.pages = pages;
   this.read = read;
+  this.toggleRead = function () {
+    this.read = !this.read;
+  };
 }
 
 const newBookButton = document.querySelector(".new");
 newBookButton.addEventListener("click", showBookForm);
 const form = document.createElement("form");
-form.innerHTML = `
-            <input type="text" name="title" placeholder="Title" required />
-            <input type="text" name="author" placeholder="Author" required />
-            <input type="number" name="pages" placeholder="Pages" required />
-            <label>
-                <input type="checkbox" name="read" />
-                Read
-            </label>
+form.innerHTML = `          
+              <input type="text" id="title" name="title" placeholder="Title" required />
+              <input type="text" id="author" name="author" placeholder="Author" required />
+              <input type="number" id="pages" name="pages" placeholder="Pages" min="5" required />
+              <div>
+                <label for="read">Read:</label>
+                <input type="checkbox" id="read" name="read" />
+              </div>
             <button type="submit">Add Book</button>
         `;
 
@@ -69,9 +72,16 @@ function displayBooks() {
             <p>${book.author}</p>
             <p>${book.pages}</p>
             <p>Status: ${book.read ? "Read" : "Not Read"}</p>
+            <button class="toggle-read">Change Status</button>
             <button class="remove-book">Remove</button>
         `;
     booksContainer.appendChild(bookCard);
+
+    const toggleReadButton = bookCard.querySelector(".toggle-read");
+    toggleReadButton.addEventListener("click", () => {
+      book.toggleRead();
+      displayBooks();
+    });
 
     const removeButton = bookCard.querySelector(".remove-book");
     removeButton.addEventListener("click", () => {
@@ -79,5 +89,17 @@ function displayBooks() {
     });
   });
 }
+
+const dialog = document.querySelector("dialog");
+dialog.addEventListener("click", (e) => {
+  if (e.target === dialog) {
+    dialog.close();
+    dialog.removeChild(form);
+  }
+});
+
+dialog.querySelector("form").addEventListener("click", (e) => {
+  e.stopPropagation();
+});
 
 displayBooks();

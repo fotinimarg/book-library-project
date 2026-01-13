@@ -12,6 +12,10 @@ body {
   padding: 16px;
   background-color: #f9dbbd;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
@@ -19,10 +23,8 @@ h1 {
   color: #450920;
 }
 
-.new {
-  padding: 10px 20px;
-  margin: 20px;
-  font-size: 16px;
+.new,
+.toggle-read {
   border: none;
   border-radius: 8px;
   background-color: #da627d;
@@ -31,9 +33,25 @@ h1 {
   transition-duration: 0.3s;
 }
 
+.new {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.toggle-read {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+}
+
 .new:hover {
-  background-color: #a53860;
-  box-shadow: #f95c985f 0px 0px 8px 2px;
+  box-shadow: #eb64695f 0px 0px 8px 2px;
+}
+
+.toggle-read:hover {
+  box-shadow: #ff6f755f 0px 0px 8px 2px;
 }
 
 #book-container {
@@ -56,4 +74,70 @@ h1 {
 
 .book:hover {
   box-shadow: 0 0 4px 2px #a5386067;
+}
+
+dialog {
+  border: none;
+  border-radius: 8px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+  text-align: left;
+  width: 250px;
+}
+
+form div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: #450920;
+  color: white;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+form button:hover {
+  box-shadow: #6015305d 0px 0px 8px 2px;
+}
+
+.remove-book {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ffa5ab;
+  color: white;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+
+.remove-book:hover {
+  box-shadow: #ff6f755f 0px 0px 8px 2px;
 }
