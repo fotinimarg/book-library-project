@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  padding: 16px;
+  padding: 12px;
   background-color: #f9dbbd;
   text-align: center;
   display: flex;
@@ -37,6 +37,7 @@ h1 {
   margin: 20px;
   padding: 10px 20px;
   font-size: 16px;
+  align-self: flex-start;
 }
 
 .toggle-read {
@@ -55,17 +56,21 @@ h1 {
 }
 
 #book-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 5px;
 }
 
 .book {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: none;
   padding: 16px;
   margin: 16px;
-  min-width: 200px;
+  min-width: 250px;
   border-radius: 8px;
   background-color: #f9f9f9;
   transition-duration: 0.3s;
@@ -76,10 +81,16 @@ h1 {
   box-shadow: 0 0 4px 2px #a5386067;
 }
 
+.book div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
 dialog {
   border: none;
   border-radius: 8px;
-
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 40%;

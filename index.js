@@ -6,10 +6,11 @@ function Book(id, title, author, pages, read) {
   this.author = author;
   this.pages = pages;
   this.read = read;
-  this.toggleRead = function () {
-    this.read = !this.read;
-  };
 }
+
+Book.prototype.toggleRead = function () {
+  this.read = !this.read;
+};
 
 const newBookButton = document.querySelector(".new");
 newBookButton.addEventListener("click", showBookForm);
@@ -72,8 +73,10 @@ function displayBooks() {
             <p>${book.author}</p>
             <p>${book.pages}</p>
             <p>Status: ${book.read ? "Read" : "Not Read"}</p>
-            <button class="toggle-read">Change Status</button>
-            <button class="remove-book">Remove</button>
+            <div>
+              <button class="toggle-read">Change Status</button>
+              <button class="remove-book">Remove</button>
+            </div>
         `;
     booksContainer.appendChild(bookCard);
 
