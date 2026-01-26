@@ -1,19 +1,73 @@
-const myLibrary = [];
+class Library {
+  #books = [];
 
-function Book(id, title, author, pages, read) {
-  this.id = id;
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+  addBook(title, author, pages, read) {
+    const newBook = new Book(crypto.randomUUID(), title, author, pages, read);
+    this.#books.push(newBook);
+    this.displayBooks();
+  }
+
+  removeBook(bookId) {
+    const bookIndex = this.#books.findIndex((book) => book.id === bookId);
+    if (bookIndex !== -1) {
+      this.#books.splice(bookIndex, 1);
+      this.displayBooks();
+    }
+  }
+
+  displayBooks() {
+    const booksContainer = document.getElementById("book-container");
+    booksContainer.innerHTML = "";
+
+    this.#books.forEach((book) => {
+      const bookCard = document.createElement("div");
+      bookCard.classList.add("book");
+      bookCard.dataset.id = book.id;
+      bookCard.innerHTML = `
+            <h2>${book.title}</h2>
+            <p>${book.author}</p>
+            <p>${book.pages}</p>
+            <p>Status: ${book.read ? "Read" : "Not Read"}</p>
+            <div>
+              <button class="toggle-read">Change Status</button>
+              <button class="remove-book">Remove</button>
+            </div>
+        `;
+      booksContainer.appendChild(bookCard);
+
+      // let user switch between "read" and "not read"
+      const toggleReadButton = bookCard.querySelector(".toggle-read");
+      toggleReadButton.addEventListener("click", () => {
+        book.toggleRead();
+        this.displayBooks();
+      });
+
+      // let user delete a book from the library
+      const removeButton = bookCard.querySelector(".remove-book");
+      removeButton.addEventListener("click", () => {
+        this.removeBook(book.id);
+      });
+    });
+  }
 }
 
-Book.prototype.toggleRead = function () {
-  this.read = !this.read;
-};
+class Book {
+  constructor(id, title, author, pages, read) {
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+  }
 
-const newBookButton = document.querySelector(".new");
-newBookButton.addEventListener("click", showBookForm);
+  toggleRead() {
+    this.read = !this.read;
+  }
+}
+
+const lib = new Library();
+
+// form creation
 const form = document.createElement("form");
 form.innerHTML = `          
               <input type="text" id="title" name="title" placeholder="Title" required />
@@ -26,6 +80,9 @@ form.innerHTML = `
             <button type="submit">Add Book</button>
         `;
 
+// display the book form to web-page
+const newBookButton = document.querySelector(".new");
+newBookButton.addEventListener("click", showBookForm);
 function showBookForm() {
   const dialog = document.querySelector("#new-book-dialog");
   dialog.appendChild(form);
@@ -39,60 +96,14 @@ function showBookForm() {
     const pages = parseInt(formData.get("pages"), 10);
     const read = formData.get("read") === "on";
 
-    addBookToLibrary(title, author, pages, read);
+    lib.addBook(title, author, pages, read);
     form.reset();
     dialog.removeChild(form);
     dialog.close();
   };
 }
 
-function addBookToLibrary(title, author, pages, read) {
-  const newBook = new Book(crypto.randomUUID(), title, author, pages, read);
-  myLibrary.push(newBook);
-  displayBooks();
-}
-
-function removeBookFromLibrary(bookId) {
-  const bookIndex = myLibrary.findIndex((book) => book.id === bookId);
-  if (bookIndex !== -1) {
-    myLibrary.splice(bookIndex, 1);
-    displayBooks();
-  }
-}
-
-function displayBooks() {
-  const booksContainer = document.getElementById("book-container");
-  booksContainer.innerHTML = "";
-
-  myLibrary.forEach((book) => {
-    const bookCard = document.createElement("div");
-    bookCard.classList.add("book");
-    bookCard.dataset.id = book.id;
-    bookCard.innerHTML = `
-            <h2>${book.title}</h2>
-            <p>${book.author}</p>
-            <p>${book.pages}</p>
-            <p>Status: ${book.read ? "Read" : "Not Read"}</p>
-            <div>
-              <button class="toggle-read">Change Status</button>
-              <button class="remove-book">Remove</button>
-            </div>
-        `;
-    booksContainer.appendChild(bookCard);
-
-    const toggleReadButton = bookCard.querySelector(".toggle-read");
-    toggleReadButton.addEventListener("click", () => {
-      book.toggleRead();
-      displayBooks();
-    });
-
-    const removeButton = bookCard.querySelector(".remove-book");
-    removeButton.addEventListener("click", () => {
-      removeBookFromLibrary(book.id);
-    });
-  });
-}
-
+// close dialog when user clicks outside of it
 const dialog = document.querySelector("dialog");
 dialog.addEventListener("click", (e) => {
   if (e.target === dialog) {
@@ -105,4 +116,4 @@ dialog.querySelector("form").addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
-displayBooks();
+lib.displayBooks();
