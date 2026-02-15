@@ -69,10 +69,10 @@ const lib = new Library();
 
 // form creation
 const form = document.createElement("form");
-form.innerHTML = `          
-              <input type="text" id="title" name="title" placeholder="Title" required />
-              <input type="text" id="author" name="author" placeholder="Author" required />
-              <input type="number" id="pages" name="pages" placeholder="Pages" min="5" required />
+form.innerHTML = `
+              <input type="text" id="title" name="title" placeholder="Title" />
+              <input type="text" id="author" name="author" placeholder="Author" />
+              <input type="number" id="pages" name="pages" placeholder="Pages" />
               <div>
                 <label for="read">Read:</label>
                 <input type="checkbox" id="read" name="read" />
@@ -81,30 +81,60 @@ form.innerHTML = `
         `;
 
 // display the book form to web-page
+const dialog = document.querySelector("dialog");
+dialog.appendChild(form);
+
 const newBookButton = document.querySelector(".new");
-newBookButton.addEventListener("click", showBookForm);
-function showBookForm() {
-  const dialog = document.querySelector("#new-book-dialog");
-  dialog.appendChild(form);
+newBookButton.addEventListener("click", () => {
   dialog.showModal();
+});
 
-  dialog.querySelector("form").onsubmit = (e) => {
+const titleInput = form.querySelector("#title");
+const authorInput = form.querySelector("#author");
+const pagesInput = form.querySelector("#pages");
+
+[titleInput, authorInput, pagesInput].forEach((input) => {
+  input.addEventListener("input", () => {
+    input.setCustomValidity("");
+  });
+});
+
+form.onsubmit = (e) => {
+  const formData = new FormData(form);
+  const title = formData.get("title");
+  const author = formData.get("author");
+  const pages = parseInt(formData.get("pages"), 10);
+  const read = formData.get("read") === "on";
+
+  if (title.trim().length === 0) {
     e.preventDefault();
-    const formData = new FormData(form);
-    const title = formData.get("title");
-    const author = formData.get("author");
-    const pages = parseInt(formData.get("pages"), 10);
-    const read = formData.get("read") === "on";
+    titleInput.setCustomValidity("The title must be filled!");
+    titleInput.reportValidity();
+    return;
+  }
 
-    lib.addBook(title, author, pages, read);
-    form.reset();
-    dialog.removeChild(form);
-    dialog.close();
-  };
-}
+  if (author.trim().length === 0) {
+    e.preventDefault();
+    authorInput.setCustomValidity("The author name must be filled!");
+    authorInput.reportValidity();
+    return;
+  }
+
+  if (isNaN(pages) || pages < 5) {
+    e.preventDefault();
+    pagesInput.setCustomValidity("The book should have at least 5 pages.");
+    pagesInput.reportValidity();
+    return;
+  }
+
+  e.preventDefault();
+
+  lib.addBook(title, author, pages, read);
+  form.reset();
+  dialog.close();
+};
 
 // close dialog when user clicks outside of it
-const dialog = document.querySelector("dialog");
 dialog.addEventListener("click", (e) => {
   if (e.target === dialog) {
     dialog.close();
